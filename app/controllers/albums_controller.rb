@@ -1,5 +1,6 @@
 class AlbumsController < ApplicationController
-  before_action :require_user!
+  before_action :require_user!, only: [:new, :show, :edit]
+  before_action :invalid_request, only: [:create, :update, :destroy]
 
   def show
     @album = Album.find(params[:id])
@@ -14,7 +15,7 @@ class AlbumsController < ApplicationController
 
   def create
     @album = Album.new(album_params)
-
+    p @album
     if @album.save
       redirect_to album_url(@album)
     else
@@ -47,6 +48,10 @@ class AlbumsController < ApplicationController
   end
 
   private
+
+  def invalid_request
+    render json: {}, status: 401
+  end
 
   def album_params
     params.require(:album).permit(:band_id, :live, :name, :year)
