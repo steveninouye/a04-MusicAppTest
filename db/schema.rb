@@ -12,38 +12,4 @@
 
 ActiveRecord::Schema.define(version: 2018_11_19_004643) do
 
-  create_table "albums", force: :cascade do |t|
-    t.string "name"
-    t.integer "band_id"
-    t.integer "year"
-    t.boolean "live"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "bands", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "tracks", force: :cascade do |t|
-    t.string "name"
-    t.integer "album_id"
-    t.integer "ord"
-    t.boolean "bonus"
-    t.text "lyrics"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "email"
-    t.string "password_digest"
-    t.string "session_token"
-    t.boolean "activated"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
 end
