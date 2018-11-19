@@ -15,7 +15,6 @@ class AlbumsController < ApplicationController
 
   def create
     @album = Album.new(album_params)
-    p @album
     if @album.save
       redirect_to album_url(@album)
     else
@@ -50,7 +49,7 @@ class AlbumsController < ApplicationController
   private
 
   def invalid_request
-    render json: {}, status: 401
+    render json: {}, status: 401 unless current_user
   end
 
   def album_params
