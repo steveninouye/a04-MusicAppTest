@@ -18,7 +18,7 @@ RSpec.describe AlbumsController, type: :controller do
     end
 
     describe 'renders a 401 when trying to send information to create' do
-      before {post :create}
+      before { post :create }
       it {should respond_with(401)}
     end
 
@@ -47,8 +47,8 @@ RSpec.describe AlbumsController, type: :controller do
     end
 
     describe "GET #new" do
-      it "renders new template" do
-        get :new, params: { band_id: 1}
+      it "renders new temp" do
+        get :new, params: { band_id: 1 }
         expect(response).to render_template('new')
       end
     end
@@ -56,58 +56,62 @@ RSpec.describe AlbumsController, type: :controller do
     describe "POST #create" do
       describe 'with valid information' do
         it "saves album to databse" do
-          # post :create, params: { album: { band_id: 1, name: "Barny Pebble", year: 1969 } }
-          # expect(Album.last.name).to eq('Barny Pebble')
+          post :create, params: { album: { band_id: 1, name: "Barny Pebble", year: 1969 } }
+          expect(Album.last.name).to eq('Barny Pebble')
         end
 
-        it "redirects to the album sho page"
+        it "redirects to the album show page" do
+          post :create, params: { album: { band_id: 1, name: "Barny Pebble", year: 1969 } }
+          expect(response).to redirect_to(album_url(Album.last))
+        end
+      end
 
+      describe 'with invalid information' do
+        it 'renders new template' do
+          post :create, params: { album: { band_id: 1, name: "Barny Pebble" } }
+          expect(response).to render_template('new')
+        end
       end
     end
 
+    describe "GET #edit" do
+      it 'renders edit template' do
+        get :edit, params: { id: 1 }
+        expect(response).to render_template('edit')
+      end
+    end
+
+    describe "PATCH #update" do
+      describe 'with valid information' do
+        it "updates the album in databse" do
+          patch :update, params: { id: 1, album: { band_id: 1, name: "Bam Bam Bam", year: 1969 } }
+          expect(Album.find_by(id: 1).name).to eq('Bam Bam Bam')
+        end
+
+        it "redirects to the album show page" do
+          patch :update, params: { id: 1, album: { band_id: 1, name: "Bam Bam Bam", year: 1969 } }
+          expect(response).to redirect_to(album_url(Album.find_by(id: 1)))
+        end
+      end
+
+      describe 'with invalid information' do
+        it 'renders edit template' do
+          patch :update, params: { id: 1, album: { band_id: 1, name: "", year: 1969 } }
+          expect(response).to render_template('edit')
+        end
+      end
+    end
+
+    describe "DELETE #destroy" do
+      it "should delete the album from the databse" do
+        delete :destroy, params: { id: 1 }
+        expect(Album.find_by(id: 1)).to be nil
+      end
+
+      it "should redirect to the band it belonged to" do
+        delete :destroy, params: { id: 1 }
+        expect(response).to redirect_to(band_url(Band.find_by(name: 'JigglyPuff Rockstars')))
+      end
+    end
   end
-
-  #
-  # describe "GET #show" do
-  #   it "returns http success" do
-  #     get :show
-  #     expect(response).to have_http_status(:success)
-  #   end
-  # end
-  #
-  # describe "GET #new" do
-  #   it "returns http success" do
-  #     get :new
-  #     expect(response).to have_http_status(:success)
-  #   end
-  # end
-  #
-  # describe "GET #create" do
-  #   it "returns http success" do
-  #     get :create
-  #     expect(response).to have_http_status(:success)
-  #   end
-  # end
-  #
-  # describe "GET #edit" do
-  #   it "returns http success" do
-  #     get :edit
-  #     expect(response).to have_http_status(:success)
-  #   end
-  # end
-  #
-  # describe "GET #update" do
-  #   it "returns http success" do
-  #     get :update
-  #     expect(response).to have_http_status(:success)
-  #   end
-  # end
-  #
-  # describe "GET #destroy" do
-  #   it "returns http success" do
-  #     get :destroy
-  #     expect(response).to have_http_status(:success)
-  #   end
-  # end
-
 end
