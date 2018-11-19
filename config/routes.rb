@@ -1,31 +1,7 @@
 Rails.application.routes.draw do
-  get 'tracks/index'
-  get 'tracks/show'
-  get 'tracks/new'
-  get 'tracks/create'
-  get 'tracks/edit'
-  get 'tracks/update'
-  get 'tracks/destroy'
-  get 'bands/index'
-  get 'bands/show'
-  get 'bands/new'
-  get 'bands/create'
-  get 'bands/edit'
-  get 'bands/update'
-  get 'bands/destroy'
-  get 'albums/index'
-  get 'albums/show'
-  get 'albums/new'
-  get 'albums/create'
-  get 'albums/edit'
-  get 'albums/update'
-  get 'albums/destroy'
-  get 'users/index'
-  get 'users/show'
-  get 'users/new'
-  get 'users/create'
-  get 'users/edit'
-  get 'users/update'
-  get 'users/destroy'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :tracks
+  resources :albums
+  resources :bands
+  resources :users
+  resource :session
 end
