@@ -64,12 +64,22 @@ RSpec.describe AlbumsController, type: :controller do
           post :create, params: { album: { band_id: 1, name: "Barny Pebble", year: 1969 } }
           expect(response).to redirect_to(album_url(Album.last))
         end
+
+        it "should flash notices" do
+          post :create, params: { album: { band_id: 1, name: "Barny Pebble", year: 1969 } }
+          expect(flash[:notices]).to be_present
+        end
       end
 
       describe 'with invalid information' do
         it 'renders new template' do
           post :create, params: { album: { band_id: 1, name: "Barny Pebble" } }
           expect(response).to render_template('new')
+        end
+
+        it 'flash errors' do
+          post :create, params: { album: { band_id: 1, name: "Barny Pebble" } }
+          expect(flash[:errors]).to be_present
         end
       end
     end
@@ -88,6 +98,11 @@ RSpec.describe AlbumsController, type: :controller do
           expect(Album.find_by(id: 1).name).to eq('Bam Bam Bam')
         end
 
+        it "should flash notices" do
+          post :create, params: { album: { band_id: 1, name: "Barny Pebble", year: 1969 } }
+          expect(flash[:notices]).to be_present
+        end
+
         it "redirects to the album show page" do
           patch :update, params: { id: 1, album: { band_id: 1, name: "Bam Bam Bam", year: 1969 } }
           expect(response).to redirect_to(album_url(Album.find_by(id: 1)))
@@ -99,13 +114,23 @@ RSpec.describe AlbumsController, type: :controller do
           patch :update, params: { id: 1, album: { band_id: 1, name: "", year: 1969 } }
           expect(response).to render_template('edit')
         end
+
+        it 'flash errors' do
+          patch :update, params: { id: 1, album: { band_id: 1, name: "", year: 1969 } }
+          expect(flash[:errors]).to be_present
+        end
       end
     end
 
     describe "DELETE #destroy" do
-      it "should delete the album from the databse" do
+      it "should delete the album from the database" do
         delete :destroy, params: { id: 1 }
         expect(Album.find_by(id: 1)).to be nil
+      end
+
+      it "should flash notices" do
+        delete :destroy, params: { id: 1 }
+        expect(flash[:notices]).to be_present
       end
 
       it "should redirect to the band it belonged to" do
