@@ -1,5 +1,6 @@
 class BandsController < ApplicationController
-  before_action :require_user!
+  before_action :require_user!, only: [:new, :show, :edit]
+  before_action :invalid_request, only: [:create, :update, :destroy]
 
   def index
     @bands = Band.all
@@ -49,6 +50,10 @@ class BandsController < ApplicationController
   end
 
   private
+
+  def invalid_request
+    render json: {}, status: 401 unless current_user
+  end
 
   def band_params
     params.require(:band).permit(:name)
